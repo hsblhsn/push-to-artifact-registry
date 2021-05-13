@@ -1,0 +1,15 @@
+on:
+  push:
+
+jobs:
+  build:
+    name: Build docker image.
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Docker build
+        uses: docker/build-push-action@v2
+        with:
+          push: false
+          tags: ci-build-image:tmp

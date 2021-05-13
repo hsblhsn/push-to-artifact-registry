@@ -1,0 +1,26 @@
+name: "Push to Artifact Registry"
+description: "A GitHub Action to Build and Push docker image to Google Cloud Artifact Registry."
+inputs:
+  gcp-project-id:
+    description: "Google Cloud Platform project name."
+    required: true
+  gcp-region:
+    description: "Google Cloud Platform Artifact Registry region."
+    required: true
+  gcp-sa:
+    description: "Google Cloud Platform service account to log in Google Cloud SDK."
+    required: true
+  deployment-namespace:
+    description: "Google Cloud Platform Artifact Registry repository. Also works as a namespace."
+    required: true
+runs:
+  using: "docker"
+  image: "Dockerfile"
+  args:
+    - ${{ inputs.gcp-project-id }}
+    - ${{ inputs.gcp-region }}
+    - ${{ inputs.gcp-sa }}
+    - ${{ inputs.deployment-namespace }}
+branding:
+  icon: "box"
+  color: "blue"
