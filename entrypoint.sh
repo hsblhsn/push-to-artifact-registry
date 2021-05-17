@@ -4,10 +4,12 @@ GCP_PROJECT_ID=$1
 GCP_REGION=$2
 GCP_SA=$3
 DEPLOYMENT_NAMESPACE=$4
+SERVICE_NAME=$(basename ${GITHUB_REPOSITORY} | sed -e 's/[^[:alnum:]]/-/g' | tr -s '-' | tr A-Z a-z)
 
 
-DOCKER_IMAGE="${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT_ID}/${DEPLOYMENT_NAMESPACE}/${GITHUB_REPOSITORY}:${GITHUB_SHA}"
-echo "TARGET: ${DOCKER_IMAGE}"
+DOCKER_IMAGE="${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT_ID}/${DEPLOYMENT_NAMESPACE}/${SERVICE_NAME}:${GITHUB_SHA::7}"
+DOCKER_IMAGE_LATEST="${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT_ID}/${DEPLOYMENT_NAMESPACE}/${SERVICE_NAME}:latest"
+echo "TARGETS:\n\t${DOCKER_IMAGE}\n\t${DOCKER_IMAGE_LATEST}"
 
 # copy the gcp sa first.
 mkdir -p /gcp
@@ -25,12 +27,14 @@ gcloud config set project "${GCP_PROJECT_ID}"
 echo "Setting docker credentials..."
 gcloud --quiet auth configure-docker us-central1-docker.pkg.dev
 
-# build the docker image.
+# build and tag the docker image.
 echo "Building docker image..."
 docker build --tag "$DOCKER_IMAGE" .
+docker tag "${DOCKER_IMAGE}" "${DOCKER_IMAGE_LATEST}"
 
-# push the docker image.
+# push the docker images.
 echo "Pushing docker image..."
-docker push "$DOCKER_IMAGE"
+docker push "${DOCKER_IMAGE}"
+docker push "${DOCKER_IMAGE_LATEST}"
 
-echo "::set-output name=pushed_image::$DOCKER_IMAGE"
+echo "::set-output name=pushed_image::${DOCKER_IMAGE}"
