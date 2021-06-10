@@ -26,6 +26,7 @@ gcloud config set project "${GCP_PROJECT_ID}"
 # setup docker credentials for us-central1-docker.pkg.dev.
 echo "Setting docker credentials..."
 gcloud --quiet auth configure-docker
+echo "Setting docker credentials for artifact registry..."
 gcloud --quiet auth configure-docker us-central1-docker.pkg.dev
 
 # build and tag the docker image.
