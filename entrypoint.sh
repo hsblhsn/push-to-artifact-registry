@@ -3,12 +3,12 @@
 GCP_PROJECT_ID=$1
 GCP_REGION=$2
 GCP_SA=$3
-DEPLOYMENT_NAMESPACE=$4
+REPOSITORY_NAME=$(basename ${GITHUB_REPOSITORY} | sed -e 's/[^[:alnum:]]/-/g' | tr -s '-' | tr A-Z a-z)
 SERVICE_NAME=$(basename ${GITHUB_REPOSITORY} | sed -e 's/[^[:alnum:]]/-/g' | tr -s '-' | tr A-Z a-z)
 
 
-DOCKER_IMAGE="${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT_ID}/${DEPLOYMENT_NAMESPACE}/${SERVICE_NAME}:${GITHUB_SHA::7}"
-DOCKER_IMAGE_LATEST="${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT_ID}/${DEPLOYMENT_NAMESPACE}/${SERVICE_NAME}:latest"
+DOCKER_IMAGE="${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT_ID}/${REPOSITORY_NAME}/${SERVICE_NAME}:${GITHUB_SHA::7}"
+DOCKER_IMAGE_LATEST="${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT_ID}/${REPOSITORY_NAME}/${SERVICE_NAME}:latest"
 echo "TARGETS:\n\t${DOCKER_IMAGE}\n\t${DOCKER_IMAGE_LATEST}"
 
 # copy the gcp sa first.

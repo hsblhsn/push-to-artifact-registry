@@ -10,9 +10,6 @@ inputs:
   gcp-sa:
     description: "Google Cloud Platform service account to log in Google Cloud SDK."
     required: true
-  deployment-namespace:
-    description: "Google Cloud Platform Artifact Registry repository. Also works as a namespace."
-    required: true
 runs:
   using: "docker"
   image: "docker://ghcr.io/hsblhsn/push-to-artifact-registry:latest"
@@ -20,7 +17,6 @@ runs:
     - ${{ inputs.gcp-project-id }}
     - ${{ inputs.gcp-region }}
     - ${{ inputs.gcp-sa }}
-    - ${{ inputs.deployment-namespace }}
 branding:
   icon: "box"
   color: "blue"
