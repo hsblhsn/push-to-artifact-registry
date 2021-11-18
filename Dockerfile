@@ -13,4 +13,4 @@ ENV PATH $PATH:/usr/local/gcloud/google-cloud-sdk/bin
 
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x entrypoint.sh
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["bash", "/entrypoint.sh"]
