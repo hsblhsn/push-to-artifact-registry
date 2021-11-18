@@ -7,7 +7,12 @@ REPOSITORY_NAME=$(basename ${GITHUB_REPOSITORY} | sed -e 's/[^[:alnum:]]/-/g' | 
 SERVICE_NAME=$(basename ${GITHUB_REPOSITORY} | sed -e 's/[^[:alnum:]]/-/g' | tr -s '-' | tr A-Z a-z)
 
 
-DOCKER_IMAGE="${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT_ID}/${REPOSITORY_NAME}/${SERVICE_NAME}:${GITHUB_SHA::7}"
+DOCKER_TAG=${GITHUB_REF#refs/tags/}
+if [[ $DOCKER_TAG != v* ]] ;
+then
+  DOCKER_TAG=${GITHUB_SHA::7}
+fi
+DOCKER_IMAGE="${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT_ID}/${REPOSITORY_NAME}/${SERVICE_NAME}:${DOCKER_TAG}"
 DOCKER_IMAGE_LATEST="${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT_ID}/${REPOSITORY_NAME}/${SERVICE_NAME}:latest"
 echo "TARGETS:\n\t${DOCKER_IMAGE}\n\t${DOCKER_IMAGE_LATEST}"
 
