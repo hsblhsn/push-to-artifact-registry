@@ -12,10 +12,11 @@ if [[ $DOCKER_TAG != v* ]] ;
 then
   DOCKER_TAG=${GITHUB_SHA::7}
 fi
+echo "REF: ${GITHUB_REF#refs/tags/}"
 echo "TAG: ${DOCKER_TAG}"
 DOCKER_IMAGE="${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT_ID}/${REPOSITORY_NAME}/${SERVICE_NAME}:${DOCKER_TAG}"
 DOCKER_IMAGE_LATEST="${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT_ID}/${REPOSITORY_NAME}/${SERVICE_NAME}:latest"
-echo "TARGETS:\n\t${DOCKER_IMAGE}\n\t${DOCKER_IMAGE_LATEST}"
+echo "TARGET: ${DOCKER_IMAGE}"
 
 # copy the gcp sa first.
 mkdir -p /gcp
